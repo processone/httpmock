@@ -48,7 +48,7 @@ func (m *HTTPMock) LoadScenario(scenarioName string) error {
 		// TODO: Consistency checks to avoid out of range errors ?
 		seq := scn.Sequences[ref.sequenceID]
 		curStep := seq.Steps[ref.stepID]
-		resp, err := curStep.Response.ToHTTPResponse()
+		resp, err := curStep.Response.ToHTTPResponse(m.FixtureDir)
 		resp.Request = req
 
 		return resp, err

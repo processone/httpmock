@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"time"
 )
 
@@ -66,13 +67,14 @@ Loop:
 			}
 		default:
 			rec.logf("Recording response: %d", resp.StatusCode)
-			r.BodyFilename = fmt.Sprintf("%s-%d-%d%s", scnName, scn.Count()+1, redirect+1, extension(r.Header))
+			prefix := filepath.Base(scnName)
+			r.BodyFilename = fmt.Sprintf("%s-%d-%d%s", prefix, scn.Count()+1, redirect+1, extension(r.Header))
 			step := Step{
 				Method:     "GET",
 				RequestURL: uri,
 				Response:   r,
 			}
-			if err := step.SaveBody(resp.Body, r.BodyFilename); err != nil {
+			if err := step.SaveBody(resp.Body, filepath.Join(filepath.Dir(scnName), r.BodyFilename)); err != nil {
 				rec.logf("Cannot save body file %s: %s\n", r.BodyFilename, err)
 			}
 			seq.Steps = append(seq.Steps, step)

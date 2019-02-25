@@ -1,0 +1,86 @@
+{
+	"Sequences": [
+		{
+			"Steps": [
+				{
+					"RequestURL": "https://www.process-one.net/",
+					"Method": "GET",
+					"Response": {
+						"Status": "301 Moved Permanently",
+						"StatusCode": 301,
+						"Proto": "HTTP/1.1",
+						"ProtoMajor": 1,
+						"ProtoMinor": 1,
+						"Header": {
+							"Content-Type": [
+								"text/html; charset=iso-8859-1"
+							],
+							"Date": [
+								"Mon, 25 Feb 2019 15:36:20 GMT"
+							],
+							"Location": [
+								"https://www.process-one.net/en/"
+							],
+							"Server": [
+								"aol"
+							],
+							"Vary": [
+								"Accept-Encoding"
+							]
+						},
+						"BodyFilename": ""
+					},
+					"Err": ""
+				},
+				{
+					"RequestURL": "https://www.process-one.net/en/",
+					"Method": "GET",
+					"Response": {
+						"Status": "200 OK",
+						"StatusCode": 200,
+						"Proto": "HTTP/1.1",
+						"ProtoMajor": 1,
+						"ProtoMinor": 1,
+						"Header": {
+							"Cache-Control": [
+								"no-cache"
+							],
+							"Content-Type": [
+								"text/html; charset=utf-8"
+							],
+							"Date": [
+								"Mon, 25 Feb 2019 15:36:21 GMT"
+							],
+							"Expires": [
+								"Mon, 26 Jul 1997 05:00:00 GMT"
+							],
+							"Last-Modified": [
+								"Mon, 25 Feb 2019 15:36:21 GMT"
+							],
+							"Pragma": [
+								"no-cache"
+							],
+							"Public-Key-Pins": [
+								"pin-sha256=\"9ulz2wBHF3y3VhSoo4kb0G/xOVV4d4VkqE8q8TQ8qu4=\"; pin-sha256=\"hYF3NPhn9wy5mIZyucx1G8jZ0ahm+TF5O9vAa4zz5CQ=\"; max-age=604800; includeSubDomains;"
+							],
+							"Server": [
+								"aol"
+							],
+							"Set-Cookie": [
+								"exp_tracker=a%3A1%3A%7Bi%3A0%3Bs%3A5%3A%22index%22%3B%7D; path=/"
+							],
+							"Vary": [
+								"Accept-Encoding"
+							],
+							"X-Powered-By": [
+								"PHP/5.4.45-0+deb7u14"
+							]
+						},
+						"BodyFilename": "ProcessOne-1-2.html"
+					},
+					"Err": ""
+				}
+			]
+		}
+	]
+}

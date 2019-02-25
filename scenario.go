@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 // Step is used to record one of the HTTP steps in a specific query.
@@ -57,7 +58,7 @@ func NewResponse(resp *http.Response) Response {
 }
 
 // ToHTTPResponse generates an http.Response with the data from the simple response.
-func (r Response) ToHTTPResponse() (*http.Response, error) {
+func (r Response) ToHTTPResponse(basedir string) (*http.Response, error) {
 	var resp http.Response
 	resp.Status = r.Status
 	resp.StatusCode = r.StatusCode
@@ -67,8 +68,7 @@ func (r Response) ToHTTPResponse() (*http.Response, error) {
 	resp.Header = r.Header
 
 	if r.BodyFilename != "" {
-		// TODO(mr): Fixture dir should not be hardcoded
-		file, err := os.Open("fixtures/" + r.BodyFilename) // TODO(mr): Use filename join for OS independance
+		file, err := os.Open(filepath.Join(basedir, r.BodyFilename))
 		if err != nil {
 			return &resp, err
 		}

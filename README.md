@@ -27,6 +27,18 @@ adapt your code accordingly.
 
 ## Usage
 
+### Recording scenario
+
+Recording a scenario is done by adding URL endpoint your want to support.
+
+When you add an endpoint to a scenario, the instrument HTTP client will be able to reply properly with the recorded
+data.
+
+The recorder stores:
+
+- Replies to that request, including header and body;
+- Redirect sequence if any. This is important to exercice some behaviour in your HTTP crawler code.
+
 You can install HTTP recorder with the following command:
 
 ```bash
@@ -37,4 +49,144 @@ To create a scenario file in your fixtures directory, you can then use the follo
 
 ```bash
 httprec add fixtures/scenario1 -u https://www.process-one.net/
+```
+
+### Using the scenario in a test case
+
+To use the scenario in a test case, you need to:
+
+- Create an HTTPMock instance
+- Load the scenario you would like to use (set of endpoints and replies)
+- Pass the HTTPClient provided by HTTPMock to your code / library so that replies received by your code will be
+  the one from the scenario.
+
+For example:
+
+```go
+package httpmock_test
+
+import (
+	"bytes"
+	"io/ioutil"
+	"testing"
+
+	"gosrc.io/httpmock"
+)
+
+func TestHTTPMock(t *testing.T) {
+	// Setup HTTP Mock
+	mock := httpmock.NewMock("fixtures/")
+
+	// Scenario generated with:
+	// httprec add fixtures/ProcessOne -u https://www.process-one.net/
+	fixtureName := "ProcessOne"
+	if err := mock.LoadScenario(fixtureName); err != nil {
+		t.Errorf("Cannot load fixture scenario %s: %s", fixtureName, err)
+		return
+	}
+
+	HTTPClient := mock.Client
+	resp, err := HTTPClient.Get("https://www.process-one.net/")
+	if err != nil {
+		t.Errorf("Cannot get page: %s", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Errorf("Cannot read page body: %s", err)
+		return
+	}
+	if bytes.Contains(content, []byte("ProcessOne")) == false {
+		t.Errorf("'ProcessOne' not found on page")
+	}
+}
+```
+
+### Writing custom HTTP mocks
+
+You can configure HTTP mocks to reply with custom data that does not come from a scenario.
+
+Here is an example on how to use this feature. In this example, we test that we can follow redirect and return the
+final of a sequence. This can be used to check that we can properly resolve short URLs:
+
+```go
+package httpmock_test
+
+import (
+	"bytes"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strconv"
+	"strings"
+	"testing"
+
+	"gosrc.io/httpmock"
+
+	"github.com/processone/dpk/pkg/semweb"
+)
+
+// TODO: Rewrite, based on new mock package.
+func TestFollowRedirect(t *testing.T) {
+	targetSite := "https://process-one.net"
+	responder := func(req *http.Request) (*http.Response, error) {
+		if req.URL.Host == "t.co" {
+			resp := RedirectResponse(targetSite)
+			resp.Request = req
+			return resp, nil
+		}
+		if req.URL.Host == "process-one.net" {
+			resp := SimplePageResponse("Target Page Title")
+			resp.Request = req
+			return resp, nil
+		}
+		t.Errorf("unknown host: %s", req.Host)
+		return nil, errors.New("unknown host")
+	}
+
+	mock := httpmock.NewMock("")
+	mock.SetResponder(responder)
+	c := semweb.NewClient()
+	c.HTTPClient = mock.Client
+	uri := c.FollowRedirect("https://t.co/shortURL")
+	if uri != targetSite {
+		t.Errorf("unexpected uri: %s", uri)
+	}
+}
+
+// Simple basic HTTP responses
+
+func RedirectResponse(location string) *http.Response {
+	status := 301
+	reader := bytes.NewReader([]byte{})
+	header := http.Header{}
+	header.Add("Location", location)
+	response := http.Response{
+		Status:     strconv.Itoa(status),
+		StatusCode: status,
+		Body:       ioutil.NopCloser(reader),
+		Header:     header,
+	}
+	return &response
+}
+
+func SimplePageResponse(title string) *http.Response {
+	status := 200
+	template := `<html>
+<head><title>%s</title></head>
+<body><h2>%s</h2></body>
+</html>`
+	page := fmt.Sprintf(template, title, title)
+	reader := strings.NewReader(page)
+	response := http.Response{
+		Status:     strconv.Itoa(status),
+		StatusCode: status,
+		Body:       ioutil.NopCloser(reader),
+		Header:     http.Header{},
+	}
+	return &response
+}
 ```
