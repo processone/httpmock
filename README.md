@@ -24,3 +24,17 @@ the test will replay real traffic consistently. Those recorded tests are also us
 of your code against a specific version of API or content. When the target HTTP endpoint changes and breaks your
 code, you can thus now easily generate a diff of the HTTP content to understand the change in behaviour and
 adapt your code accordingly.
+
+## Usage
+
+You can install HTTP recorder with the following command:
+
+```bash
+go get -u gosrc.io/httpmock/httprec
+```
+
+To create a scenario file in your fixtures directory, you can then use the following command:
+
+```bash
+httprec add fixtures/scenario1 -u https://www.process-one.net/
+```
