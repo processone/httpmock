@@ -1,4 +1,4 @@
-dpk:
+httpmock:
   build:
     image: processone/httpmock
     dockerfile: Dockerfile
