@@ -1,0 +1,6 @@
+dpk:
+  build:
+    image: processone/httpmock
+    dockerfile: Dockerfile
+  environment:
+    - GO111MODULE=on

@@ -1,0 +1,2 @@
+- service: httpmock
+  command: bash -c "go build ./... && go test ./..."
