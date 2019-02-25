@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"httpmock"
+	"gosrc.io/httpmock"
 )
 
 var URI string

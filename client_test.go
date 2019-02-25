@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"httpmock"
+	"gosrc.io/httpmock"
 )
 
 func TestMultipleRuns(t *testing.T) {

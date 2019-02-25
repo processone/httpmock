@@ -20,7 +20,7 @@ package main
 
 // TODO(mr): Support method to be able to record http "POST" requests
 
-import "httpmock/httprec/cmd"
+import "gosrc.io/httpmock/httprec/cmd"
 
 func main() {
 	cmd.Execute()
