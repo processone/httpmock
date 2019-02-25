@@ -1,5 +1,16 @@
 # HTTPMock
 
+If you need to write test for code involving lot of API and web page scrapping, you often end up saving pages as
+fixtures and loading those fixtures to try injecting them in your code to simulate the query.
+
+However, it is time consuming to manage your test scenario and difficult to mock the HTTP calls as they can be done
+very deep in your code.
+
+This HTTPMock library intend to make those HTTP requests heavy test easier by allowing to record HTTP scenarii and
+replay them easily in your tests.
+
+## Overview
+
 HTTPMock is composed of:
 
 - a Go HTTP Mock library for writing tests,
