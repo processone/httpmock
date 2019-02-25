@@ -1,6 +1,8 @@
 # HTTPMock
 
-If you need to write test for code involving lot of API and web page scrapping, you often end up saving pages as
+[![Codeship Status for processone/httpmock](https://app.codeship.com/projects/cf2e6700-1b1a-0137-02c9-72d9af1082b6/status?branch=master)](https://app.codeship.com/projects/328623)
+
+If you need to write tests for code involving lot of API and web page scrapping, you often end up saving pages as
 fixtures and loading those fixtures to try injecting them in your code to simulate the query.
 
 However, it is time consuming to manage your test scenario and difficult to mock the HTTP calls as they can be done
