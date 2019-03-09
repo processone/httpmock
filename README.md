@@ -27,6 +27,10 @@ adapt your code accordingly.
 
 ## Usage
 
+### Tutorial
+
+A video tutorial is available: [CodeCraft #1: Writing tests in Go with HTTPMock](https://vimeo.com/321310857)
+
 ### Recording scenario
 
 Recording a scenario is done by adding URL endpoint your want to support.
